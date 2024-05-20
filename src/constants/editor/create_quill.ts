@@ -1,5 +1,6 @@
 export const create_quill = ({
   id,
+  table,
   toolbar,
   clipboard,
   keyboard,
@@ -9,6 +10,7 @@ export const create_quill = ({
   customJS,
 }: {
   id: string;
+  table: boolean;
   toolbar: 'false' | string;
   clipboard: string;
   keyboard: string;
@@ -29,7 +31,7 @@ export const create_quill = ({
     `;
   }
 
-  let modules = `toolbar: ${toolbar},`;
+  let modules = `table: ${table}, toolbar: ${toolbar},`;
 
   if (clipboard) {
     modules += `clipboard: ${clipboard},`;

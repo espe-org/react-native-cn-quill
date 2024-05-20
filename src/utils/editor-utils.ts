@@ -15,6 +15,7 @@ export const getFontName = (font: string) => {
 interface CreateHtmlArgs {
   initialHtml?: string;
   placeholder: string;
+  table: boolean;
   toolbar: string;
   clipboard?: string;
   keyboard?: string;
@@ -35,6 +36,7 @@ interface CreateHtmlArgs {
 const Inital_Args = {
   initialHtml: '',
   placeholder: 'write here',
+  table: true,
   toolbar: 'false',
   clipboard: '',
   keyboard: '',
@@ -94,6 +96,7 @@ export const createHtml = (args: CreateHtmlArgs = Inital_Args) => {
   ${quill_js(args.libraries === 'cdn')}
   ${create_quill({
     id: args.editorId,
+    table: args.table,
     toolbar: args.toolbar,
     clipboard: args.clipboard ? args.clipboard : '',
     keyboard: args.keyboard ? args.keyboard : '',

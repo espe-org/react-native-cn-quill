@@ -92,6 +92,10 @@ export const editor_js = `
     quill.insertEmbed(index, type, value);
   }
 
+  var insertTable = function (rows, columns) {
+    quill.getModule('table').insertTable(rows, columns);
+  }
+
   var insertText = function (index, text, formats={}) {
     quill.insertText(index, text, formats);
   }
@@ -259,6 +263,9 @@ export const editor_js = `
         break;
       case 'insertEmbed':
         insertEmbed(msg.index, msg.type, msg.value);
+        break;
+      case 'insertTable':
+        insertTable(msg.rows, msg.columns);
         break;
       case 'insertText':
         insertText(msg.index, msg.text, msg.formats);

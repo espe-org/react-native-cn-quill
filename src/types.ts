@@ -89,6 +89,7 @@ export interface GetLeafResponse {
 export interface QuillConfig {
   id?: string;
   modules?: {
+    table: boolean;
     toolbar: boolean | Array<Array<string | object> | string | object> | string;
     clipboard?: string;
     keyboard?: string;

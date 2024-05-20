@@ -127,6 +127,7 @@ export default class QuillEditor extends React.Component<
         id: 'editor-container',
         placeholder: 'write here!',
         modules: {
+          table: true,
           toolbar: false,
         },
         theme: 'snow',
@@ -142,6 +143,7 @@ export default class QuillEditor extends React.Component<
       autoSize: this.props.autoSize,
       placeholder: quill.placeholder,
       theme: quill.theme ? quill.theme : 'snow',
+      table: quill.modules?.table,
       toolbar: JSON.stringify(quill.modules?.toolbar),
       clipboard: quill.modules?.clipboard,
       keyboard: quill.modules?.keyboard,
@@ -319,6 +321,10 @@ export default class QuillEditor extends React.Component<
 
   insertEmbed = (index: number, type: string, value: any) => {
     this.post({ command: 'insertEmbed', index, type, value });
+  };
+
+  insertTable = (rows: number, columns: number) => {
+    this.post({ command: 'insertTable', rows, columns });
   };
 
   insertText = (index: number, text: string, formats?: Record<string, any>) => {
