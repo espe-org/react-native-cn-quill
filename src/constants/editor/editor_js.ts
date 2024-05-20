@@ -96,6 +96,34 @@ export const editor_js = `
     quill.getModule('table').insertTable(rows, columns);
   }
 
+  var insertRowAbove = function () {
+    quill.getModule('table').insertRowAbove();
+  }
+
+  var insertRowBelow = function () {
+    quill.getModule('table').insertRowBelow();
+  }
+
+  var insertColumnLeft = function () {
+    quill.getModule('table').insertColumnLeft();
+  }
+
+  var insertColumnRight = function () {
+    quill.getModule('table').insertColumnRight();
+  }
+
+  var deleteRow = function () {
+    quill.getModule('table').deleteRow();
+  }
+
+  var deleteColumn = function () {
+    quill.getModule('table').deleteColumn();
+  }
+
+  var deleteTable = function () {
+    quill.getModule('table').deleteTable();
+  }
+
   var insertText = function (index, text, formats={}) {
     quill.insertText(index, text, formats);
   }
@@ -266,6 +294,27 @@ export const editor_js = `
         break;
       case 'insertTable':
         insertTable(msg.rows, msg.columns);
+        break;
+      case 'insertRowAbove':
+        insertRowAbove();
+        break;
+      case 'insertRowBelow':
+        insertRowBelow();
+        break;
+      case 'insertColumnLeft':
+        insertColumnLeft();
+        break;
+      case 'insertColumnRight':
+        insertColumnRight();
+        break;
+      case 'deleteRow':
+        deleteRow();
+        break;
+      case 'deleteColumn':
+        deleteColumn();
+        break;
+      case 'deleteTable':
+        deleteTable();
         break;
       case 'insertText':
         insertText(msg.index, msg.text, msg.formats);
