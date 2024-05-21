@@ -950,7 +950,7 @@ export const quill_snow_css = (cdn: boolean) =>
    }
    table, th, td {
      width: 100px;
-     border: 1px solid black;
+     border: 1px solid;
      border-collapse: collapse;
    }
    </style>
