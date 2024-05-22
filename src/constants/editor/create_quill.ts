@@ -50,6 +50,7 @@ export const create_quill = ({
     placeholder: '${placeholder}',
     theme: '${theme}'
   });
+  quill.root.setAttribute('spellcheck', false);
   </script>
   `;
 };

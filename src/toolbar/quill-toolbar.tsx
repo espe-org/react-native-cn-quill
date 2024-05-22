@@ -6,6 +6,7 @@ import {
   Dimensions,
   StyleSheet,
   Platform,
+  Pressable
 } from 'react-native';
 import { fullOptions, basicOptions } from '../constants/toolbar-options';
 import type {
@@ -150,11 +151,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
       >
         <SelectionBar />
         <View style={toolbarStyle}>
-          <ScrollView
-            horizontal={true}
-            bounces={false}
-            showsHorizontalScrollIndicator={false}
-          >
+          <Pressable style={{width: '12%', height: 40, flex: 1, zIndex: 100}}  onPress={this.props.editor?.current?.blur}/>
             {toolSets.map((object, index) => {
               return (
                 object.length > 0 && (
@@ -167,7 +164,7 @@ export class QuillToolbar extends Component<QuillToolbarProps, ToolbarState> {
                 )
               );
             })}
-          </ScrollView>
+          <Pressable style={{width: '12%', height: 40, flex: 1, zIndex: 100}}  onPress={this.props.editor?.current?.blur}/>
         </View>
       </ToolbarProvider>
     );

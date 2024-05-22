@@ -34,7 +34,7 @@ export const ToggleIconButton: React.FC<Props> = (props) => {
   return (
     <TouchableWithoutFeedback onPress={handlePresss}>
       <View style={toolStyle}>
-        <Image source={source} style={imageStyle} />
+        <Image source={source} style={[imageStyle, selected && {tintColor: '#5BA9E0'}]} />
         {selected && <View style={overlayStyle} />}
       </View>
     </TouchableWithoutFeedback>

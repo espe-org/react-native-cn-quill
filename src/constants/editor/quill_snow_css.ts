@@ -91,10 +91,10 @@ export const quill_snow_css = (cdn: boolean) =>
      pointer-events: all;
    }
    .ql-editor ul[data-checked=true] > li::before {
-     content: '\\2611';
+     content: '\\26AA';
    }
    .ql-editor ul[data-checked=false] > li::before {
-     content: '\\2610';
+     content: '\\1F518';
    }
    .ql-editor li::before {
      display: inline-block;
@@ -312,8 +312,8 @@ export const quill_snow_css = (cdn: boolean) =>
      padding-right: 28.5em;
    }
    .ql-editor .ql-video {
-     display: block;
-     max-width: 100%;
+     width: 100%;
+     height: 100px;
    }
    .ql-editor .ql-video.ql-align-center {
      margin: 0 auto;

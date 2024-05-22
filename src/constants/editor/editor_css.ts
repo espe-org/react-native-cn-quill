@@ -56,6 +56,7 @@ body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: $
   outline: 0;
   overflow-y: auto;
   padding: 0;
+  padding-bottom: 42px;
   ${defaultFont ? 'font-family: "' + defaultFont + '"' : ''}
 }
 
