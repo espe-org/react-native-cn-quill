@@ -129,6 +129,7 @@ export default class App extends React.Component<any, any> {
             // not required just for to show how to pass this props
             placeholder: 'this is placeholder',
             modules: {
+              table: true,
               toolbar: false, // this is default value
             },
             theme: 'snow', // this is default value
