@@ -1,7 +1,18 @@
 export const editor_js = `
 <script>
 (function (doc) {
-  const Flatted = require('flatted')
+  function circularReplacer() {
+    const seen = new WeakSet()
+    return (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return
+        }
+        seen.add(value)
+      }
+      return value
+    }
+  }
 
   var getAttributes = function (node) {
     const attrArray = node?.attributes ? [...node.attributes] : [];
@@ -16,7 +27,7 @@ export const editor_js = `
 
   // Get the dimensions of the quill content field
   var getDimensions = function (key) {
-    const dimensionsJson = Flatted.stringify({
+    const dimensionsJson = JSON.stringify({
       type: 'get-dimensions',
       key: key,
       data: {
@@ -29,7 +40,7 @@ export const editor_js = `
 
   var getSelectedFormats = function () {
     var formats = quill.getFormat();
-      var contentChanged = Flatted.stringify({
+      var contentChanged = JSON.stringify({
                 type: 'format-change',
                 data: {formats} });
       sendMessage(contentChanged);
@@ -45,7 +56,7 @@ export const editor_js = `
   var hasFocus = function (key) {
     var hs = quill.hasFocus();
 
-    var hsJson = Flatted.stringify({
+    var hsJson = JSON.stringify({
                 type: 'has-focus',
                 key: key,
                 data: hs });
@@ -54,7 +65,7 @@ export const editor_js = `
 
   var getContents = function (key, index, length) {
     var getContentsData = quill.getContents(index, length);
-    var getContentsDataJson = Flatted.stringify({
+    var getContentsDataJson = JSON.stringify({
       type: 'get-contents',
       key: key,
       data: getContentsData });
@@ -63,7 +74,7 @@ export const editor_js = `
 
   var getText = function (key, index, length) {
     var getTextData = quill.getText(index, length);
-    var getTextDataJson = Flatted.stringify({
+    var getTextDataJson = JSON.stringify({
       type: 'get-text',
       key: key,
       data: getTextData });
@@ -72,7 +83,7 @@ export const editor_js = `
 
   var getLength = function (key) {
     var getLengthData = quill.getLength();
-    var getLengthDataJson = Flatted.stringify({
+    var getLengthDataJson = JSON.stringify({
       type: 'get-length',
       key: key,
       data: getLengthData });
@@ -81,7 +92,7 @@ export const editor_js = `
 
   var getHtml = function (key) {
     var html = quill.root.innerHTML;
-    var getHtmlJson = Flatted.stringify({
+    var getHtmlJson = JSON.stringify({
       type: 'get-html',
       key: key,
       data: html
@@ -132,19 +143,19 @@ export const editor_js = `
   var setContents = function (key, delta) {
     try {
       var setContentsData = quill.setContents(delta);
-      var setContentsDataJson = Flatted.stringify({
+      var setContentsDataJson = JSON.stringify({
         type: 'set-contents',
         key: key,
         data: setContentsData });
         sendMessage(setContentsDataJson);
     } catch (error) {
-      var errorJson = Flatted.stringify({
+      var errorJson = JSON.stringify({
         type: 'set-contents-error',
         key: key,
         data: { message: error.message, stack: error.stack } });
         sendMessage(errorJson);
 
-        var setContentsDataJson = Flatted.stringify({
+        var setContentsDataJson = JSON.stringify({
           type: 'set-contents',
           key: key,
           data: {} });
@@ -174,7 +185,7 @@ export const editor_js = `
 
   var getBounds = function (key, index, length = 0) {
     var boundsData = quill.getBounds(index, length);
-    var getBoundsJson = Flatted.stringify({
+    var getBoundsJson = JSON.stringify({
       type: 'get-bounds',
       key: key,
       data: boundsData });
@@ -183,7 +194,7 @@ export const editor_js = `
 
   var getSelection = function (key, focus = false) {
     var getSelectionData = quill.getSelection(focus);
-    var getSelectionJson = Flatted.stringify({
+    var getSelectionJson = JSON.stringify({
       type: 'get-selection',
       key: key,
       data: getSelectionData 
@@ -193,7 +204,7 @@ export const editor_js = `
 
   const getFormat = function (key, index, length) {
     const getFormatData = quill.getFormat(index, length);
-    const getFormatJson = Flatted.stringify({
+    const getFormatJson = JSON.stringify({
       type: 'get-format',
       key: key,
       data: getFormatData
@@ -210,7 +221,7 @@ export const editor_js = `
       index: quill.getIndex(leaf),
       attributes: getAttributes(leaf?.parent?.domNode)
     } : null
-    const getLeafJson = Flatted.stringify({
+    const getLeafJson = JSON.stringify({
       type: 'get-leaf',
       key: key,
       data: getLeafData
@@ -220,17 +231,17 @@ export const editor_js = `
 
   const getLine = function (key, index) {
     const getLineData = quill.getLine(index);
-    const getLineJson = Flatted.stringify({
+    const getLineJson = JSON.stringify({
       type: 'get-line',
       key: key,
       data: getLineData
-    });
+    }, circularReplacer());
     sendMessage(getLineJson);
   }
 
   const removeFormat = function (key, index, length) {
     const removeFormatData = quill.removeFormat(index, length);
-    const removeFormatJson = Flatted.stringify({
+    const removeFormatJson = JSON.stringify({
       type: 'remove-format',
       key: key,
       data: removeFormatData
@@ -240,7 +251,7 @@ export const editor_js = `
 
   const formatLine = function (key, index, length, format, value, source) {
     const formatLineData = quill.formatLine(index, length, format, value, source);
-    const formatLineJson = Flatted.stringify({
+    const formatLineJson = JSON.stringify({
       type: 'format-line',
       key: key,
       data: formatLineData
@@ -250,7 +261,7 @@ export const editor_js = `
 
   const formatText = function (key, index, length, formats, source) {
     const formatTextData = quill.formatText(index, length, formats, source);
-    const formatTextJson = Flatted.stringify({
+    const formatTextJson = JSON.stringify({
       type: 'format-text',
       key: key,
       data: formatTextData
@@ -260,7 +271,7 @@ export const editor_js = `
 
 
   var getRequest = function (event) {
-    var msg = Flatted.parse(event.data);
+    var msg = JSON.parse(event.data);
     switch (msg.command) {
       case 'format':
         formatSelection(msg.name, msg.value);
@@ -384,14 +395,14 @@ export const editor_js = `
         getSelectedFormats();
       }
     }
-    var getEditorChange = Flatted.stringify({
+    var getEditorChange = JSON.stringify({
       type: 'editor-change',
       data: { eventName, args }
     });
     sendMessage(getEditorChange);
 
     // Notify of dimensions update
-    const getDimensionsJson = Flatted.stringify({
+    const getDimensionsJson = JSON.stringify({
       type: 'dimensions-change',
       data: {
         width: quill.root.scrollWidth,
@@ -402,7 +413,7 @@ export const editor_js = `
   });
 
   quill.on('text-change', function(delta, oldDelta, source) {
-    var getTextChange = Flatted.stringify({
+    var getTextChange = JSON.stringify({
       type: 'text-change',
       data: { delta, oldDelta, source }
     });
@@ -410,7 +421,7 @@ export const editor_js = `
 
     // Notify of HTML update
     var html = quill.root.innerHTML;
-    var getHtmlJson = Flatted.stringify({
+    var getHtmlJson = JSON.stringify({
       type: 'html-change',
       data: { html }
     });
@@ -418,25 +429,25 @@ export const editor_js = `
   });
 
   quill.on('selection-change', function(range, oldRange, source) {
-    var getSelectionChange = Flatted.stringify({
+    var getSelectionChange = JSON.stringify({
       type: 'selection-change',
       data: { range, oldRange, source } });
       sendMessage(getSelectionChange)
   });
 
   quill.root.addEventListener('blur', function () {
-    sendMessage(Flatted.stringify({type: 'blur'}));
+    sendMessage(JSON.stringify({type: 'blur'}));
   });
 
   quill.root.addEventListener('focus', function () {
-    sendMessage(Flatted.stringify({type: 'focus'}));
+    sendMessage(JSON.stringify({type: 'focus'}));
   });
 
 
 
   // Report initial dimensions when the editor is instantiated
   setTimeout(() => {
-    const getDimensionsJson = Flatted.stringify({
+    const getDimensionsJson = JSON.stringify({
       type: 'dimensions-change',
       data: {
         width: quill.root.scrollWidth,
