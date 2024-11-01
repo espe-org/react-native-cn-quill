@@ -1,19 +1,6 @@
 export const editor_js = `
 <script>
 (function (doc) {
-  function circularReplacer() {
-    const seen = new WeakSet()
-    return (key, value) => {
-      if (typeof value === 'object' && value !== null) {
-        if (seen.has(value)) {
-          return
-        }
-        seen.add(value)
-      }
-      return value
-    }
-  }
-
   var getAttributes = function (node) {
     const attrArray = node?.attributes ? [...node.attributes] : [];
     return attrArray.reduce((_attr, node) => ({ ..._attr, [node.nodeName]: node.nodeValue}), {});
@@ -360,6 +347,63 @@ export const editor_js = `
   document.addEventListener("message", getRequest, false);
   window.addEventListener("message", getRequest, false);
 
+  const list = (value: string) => {
+    if (!Quill || !quill) {
+      return
+    }
+    const range = quill.getSelection()
+
+    if (range) {
+      const formats = quill.getFormat(range)
+
+      if ((formats.list === 'ordered' && value === 'ordered') || (formats.list === 'bullet' && value === 'bullet')) {
+        quill.formatLine(range.index, range.length, 'list', false, 'user')
+      } else {
+        // Format selection to ensure that entire selection is converted to list
+        quill.formatLine(range.index, range.length, 'list', value, 'user')
+
+        // Iterate over all lines under the same parent, and ensure they have the same list styling
+        const line = quill.getLine(range.index)[0]
+        let child = line?.parent?.children?.head
+
+        while (child) {
+          if (typeof child.format === 'function') {
+            child.format('list', value, 'silent')
+          }
+          child = child.next
+        }
+      }
+    }
+  }
+
+
+  const mergeLists = () => {
+    const lines = quill?.getLines() ?? []
+    const firstListItem = []
+    let isListStartNode = false
+
+    // Collect the first list item in each discrete list
+    for (const line of lines) {
+      if (line.domNode.tagName === 'LI' && !isListStartNode) {
+        isListStartNode = true
+        firstListItem.push(line)
+      } else if (line.domNode.tagName === 'LI') {
+        isListStartNode = false
+      }
+    }
+
+    // Ensure that all items in each discrete list have the same list style
+    for (const listItem of firstListItem) {
+      const listFormat = listItem.domNode.getAttribute('data-list')
+      let nextListElement = listItem.next
+
+      while (nextListElement) {
+        nextListElement.format('list', listFormat, 'silent')
+        nextListElement = nextListElement.next
+      }
+    }
+  }
+
   quill.on('editor-change', function(eventName, ...args) {
     if (eventName === 'text-change') {
       getSelectedFormats();
@@ -400,6 +444,7 @@ export const editor_js = `
       data: { html }
     });
     sendMessage(getHtmlJson);
+    mergeLists()
   });
 
   quill.on('selection-change', function(range, oldRange, source) {
@@ -417,7 +462,7 @@ export const editor_js = `
     sendMessage(JSON.stringify({type: 'focus'}));
   });
 
-
+  quill.getModule('toolbar').addHandler('list', list)
 
   // Report initial dimensions when the editor is instantiated
   setTimeout(() => {
