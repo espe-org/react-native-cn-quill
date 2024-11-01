@@ -244,8 +244,8 @@ export const editor_js = `
     sendMessage(removeFormatJson);
   }
 
-  const formatLine = function (key, index, length, formats, source) {
-    const formatLineData = quill.formatLine(index, length, formats, source);
+  const formatLine = function (key, index, length, format, value, source) {
+    const formatLineData = quill.formatLine(index, length, format, value, source);
     const formatLineJson = JSON.stringify({
       type: 'format-line',
       key: key,
@@ -368,7 +368,7 @@ export const editor_js = `
         removeFormat(msg.key, msg.index, msg.length);
         break;
       case 'formatLine':
-        formatLine(msg.key, msg.index, msg.length, msg.formats, msg.source);
+        formatLine(msg.key, msg.index, msg.length, msg.format, msg.value, msg.source);
         break;
       case 'formatText':
         formatText(msg.key, msg.index, msg.length, msg.formats, msg.source);

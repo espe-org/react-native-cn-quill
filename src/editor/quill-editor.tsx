@@ -395,14 +395,16 @@ export default class QuillEditor extends React.Component<
   formatLine = (
     index: number,
     length: number,
-    formats: Record<string, unknown>,
+    format: string,
+    value: any,
     source: string = 'api'
   ): Promise<any> => {
     return this.postAwait({
       command: 'formatLine',
       index,
       length,
-      formats,
+      format,
+      value,
       source,
     });
   };
