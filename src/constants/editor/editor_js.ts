@@ -348,9 +348,6 @@ export const editor_js = `
   window.addEventListener("message", getRequest, false);
 
   const list = (value: string) => {
-    if (!Quill || !quill) {
-      return
-    }
     const range = quill.getSelection()
 
     if (range) {
