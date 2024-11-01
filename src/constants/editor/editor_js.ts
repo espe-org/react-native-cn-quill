@@ -236,6 +236,31 @@ export const editor_js = `
     sendMessage(formatTextJson);
   }
 
+  const list = value => {
+    const range = quill.getSelection()
+
+    if (range) {
+      const formats = quill.getFormat(range)
+
+      if ((formats.list === 'ordered' && value === 'ordered') || (formats.list === 'bullet' && value === 'bullet')) {
+        quill.formatLine(range.index, range.length, 'list', false, 'user')
+      } else {
+        // Format selection to ensure that entire selection is converted to list
+        quill.formatLine(range.index, range.length, 'list', value, 'user')
+
+        // Iterate over all lines under the same parent, and ensure they have the same list styling
+        const line = quill.getLine(range.index)[0]
+        let child = line?.parent?.children?.head
+
+        while (child) {
+          if (typeof child.format === 'function') {
+            child.format('list', value, 'silent')
+          }
+          child = child.next
+        }
+      }
+    }
+  }
 
   var getRequest = function (event) {
     var msg = JSON.parse(event.data);
@@ -339,6 +364,9 @@ export const editor_js = `
       case 'formatText':
         formatText(msg.key, msg.index, msg.length, msg.formats, msg.source);
         break;
+      case 'list':
+        list(msg.value);
+        break;
       default:
         break;
     }
@@ -346,33 +374,6 @@ export const editor_js = `
 
   document.addEventListener("message", getRequest, false);
   window.addEventListener("message", getRequest, false);
-
-  const list = (value: string) => {
-    const range = quill.getSelection()
-
-    if (range) {
-      const formats = quill.getFormat(range)
-
-      if ((formats.list === 'ordered' && value === 'ordered') || (formats.list === 'bullet' && value === 'bullet')) {
-        quill.formatLine(range.index, range.length, 'list', false, 'user')
-      } else {
-        // Format selection to ensure that entire selection is converted to list
-        quill.formatLine(range.index, range.length, 'list', value, 'user')
-
-        // Iterate over all lines under the same parent, and ensure they have the same list styling
-        const line = quill.getLine(range.index)[0]
-        let child = line?.parent?.children?.head
-
-        while (child) {
-          if (typeof child.format === 'function') {
-            child.format('list', value, 'silent')
-          }
-          child = child.next
-        }
-      }
-    }
-  }
-
 
   const mergeLists = () => {
     const lines = quill?.getLines() ?? []

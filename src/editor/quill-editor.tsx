@@ -401,6 +401,15 @@ export default class QuillEditor extends React.Component<
     });
   };
 
+  list = (
+    value: string,
+  ): Promise<any> => {
+    return this.postAwait({
+      command: 'list',
+      value,
+    });
+  };
+
   on = (event: EditorEventType, handler: EditorEventHandler) => {
     this._handlers.push({ event, handler });
   };
