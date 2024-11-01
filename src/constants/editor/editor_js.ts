@@ -1,6 +1,18 @@
 export const editor_js = `
 <script>
 (function (doc) {
+  function circularReplacer() {
+    const seen = new WeakSet()
+    return (key, value) => {
+      if (typeof value === 'object' && value !== null) {
+        if (seen.has(value)) {
+          return
+        }
+        seen.add(value)
+      }
+      return value
+    }
+  }
 
   var getAttributes = function (node) {
     const attrArray = node?.attributes ? [...node.attributes] : [];
@@ -222,12 +234,8 @@ export const editor_js = `
     const getLineJson = JSON.stringify({
       type: 'get-line',
       key: key,
-      data: {
-        next: getLineData.next,
-        parent: getLineData.parent,
-        prev: getLineData.prev,
-      }
-    });
+      data: getLineData
+    }, circularReplacer());
     sendMessage(getLineJson);
   }
 
