@@ -1,4 +1,7 @@
 import * as React from 'react';
+import Flatted from 'flatted';
+import { createHtml } from '../utils/editor-utils';
+import { Loading } from './loading';
 import {
   WebView,
   WebViewMessageEvent,
@@ -12,7 +15,6 @@ import {
   ViewStyle,
   Platform,
 } from 'react-native';
-import { createHtml } from '../utils/editor-utils';
 import type {
   CustomFont,
   EditorMessage,
@@ -30,7 +32,6 @@ import type {
   DimensionsChangeData,
   Range,
 } from '../constants/editor-event';
-import { Loading } from './loading';
 
 export interface EditorState {
   webviewContent: string | null;
@@ -144,7 +145,7 @@ export default class QuillEditor extends React.Component<
       placeholder: quill.placeholder,
       theme: quill.theme ? quill.theme : 'snow',
       table: quill.modules?.table ?? false,
-      toolbar: JSON.stringify(quill.modules?.toolbar),
+      toolbar: Flatted.stringify(quill.modules?.toolbar),
       clipboard: quill.modules?.clipboard,
       keyboard: quill.modules?.keyboard,
       libraries: import3rdParties,
@@ -185,12 +186,12 @@ export default class QuillEditor extends React.Component<
   }
 
   private post = (obj: object) => {
-    const jsonString = JSON.stringify(obj);
+    const jsonString = Flatted.stringify(obj);
     this._webview.current?.postMessage(jsonString);
   };
 
   private toMessage = (data: string): EditorMessage => {
-    const message: EditorMessage = JSON.parse(data);
+    const message: EditorMessage = Flatted.parse(data);
     return message;
   };
 
@@ -330,31 +331,31 @@ export default class QuillEditor extends React.Component<
   };
 
   insertRowAbove = () => {
-    this.post({ command: 'insertRowAbove'});
+    this.post({ command: 'insertRowAbove' });
   };
 
   insertRowBelow = () => {
-    this.post({ command: 'insertRowBelow'});
+    this.post({ command: 'insertRowBelow' });
   };
 
   insertColumnLeft = () => {
-    this.post({ command: 'insertColumnLeft'});
+    this.post({ command: 'insertColumnLeft' });
   };
 
   insertColumnRight = () => {
-    this.post({ command: 'insertColumnRight'});
+    this.post({ command: 'insertColumnRight' });
   };
 
   deleteRow = () => {
-    this.post({ command: 'deleteRow'});
+    this.post({ command: 'deleteRow' });
   };
 
   deleteColumn = () => {
-    this.post({ command: 'deleteColumn'});
+    this.post({ command: 'deleteColumn' });
   };
 
   deleteTable = () => {
-    this.post({ command: 'deleteTable'});
+    this.post({ command: 'deleteTable' });
   };
 
   insertText = (index: number, text: string, formats?: Record<string, any>) => {
