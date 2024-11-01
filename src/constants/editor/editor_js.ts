@@ -218,14 +218,7 @@ export const editor_js = `
   }
 
   const getLine = function (key, index) {
-    const [line, offset] = quill.getLine(index);
-    const getLineData = line ? {
-      offset,
-      text: line.text,
-      length: line.text.length,
-      index: quill.getIndex(line),
-      attributes: getAttributes(line?.parent?.domNode)
-    } : null
+    const getLineData = quill.getLine(index);
     const getLineJson = JSON.stringify({
       type: 'get-line',
       key: key,
