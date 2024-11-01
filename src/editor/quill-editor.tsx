@@ -229,9 +229,7 @@ export default class QuillEditor extends React.Component<
       case 'get-html':
       case 'get-format':
       case 'get-leaf':
-      case 'get-line':
       case 'remove-format':
-      case 'format-line':
       case 'format-text':
         if (response) {
           response.resolve(message.data);
@@ -386,27 +384,6 @@ export default class QuillEditor extends React.Component<
 
   getLeaf = (index: number): Promise<GetLeafResponse | null> => {
     return this.postAwait({ command: 'getLeaf', index });
-  };
-
-  getLine = (index: number): Promise<GetLeafResponse | null> => {
-    return this.postAwait({ command: 'getLine', index });
-  };
-
-  formatLine = (
-    index: number,
-    length: number,
-    format: string,
-    value: any,
-    source: string = 'api'
-  ): Promise<any> => {
-    return this.postAwait({
-      command: 'formatLine',
-      index,
-      length,
-      format,
-      value,
-      source,
-    });
   };
 
   formatText = (

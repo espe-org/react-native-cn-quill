@@ -229,16 +229,6 @@ export const editor_js = `
     sendMessage(getLeafJson);
   }
 
-  const getLine = function (key, index) {
-    const getLineData = quill.getLine(index);
-    const getLineJson = JSON.stringify({
-      type: 'get-line',
-      key: key,
-      data: getLineData
-    }, circularReplacer());
-    sendMessage(getLineJson);
-  }
-
   const removeFormat = function (key, index, length) {
     const removeFormatData = quill.removeFormat(index, length);
     const removeFormatJson = JSON.stringify({
@@ -247,16 +237,6 @@ export const editor_js = `
       data: removeFormatData
     });
     sendMessage(removeFormatJson);
-  }
-
-  const formatLine = function (key, index, length, format, value, source) {
-    const formatLineData = quill.formatLine(index, length, format, value, source);
-    const formatLineJson = JSON.stringify({
-      type: 'format-line',
-      key: key,
-      data: formatLineData
-    });
-    sendMessage(formatLineJson);
   }
 
   const formatText = function (key, index, length, formats, source) {
@@ -311,9 +291,6 @@ export const editor_js = `
         break;
       case 'getLeaf':
         getLeaf(msg.key, msg.index);
-        break;
-      case 'getLine':
-        getLine(msg.key, msg.index);
         break;
       case 'setSelection':
         setSelection(msg.index, msg.length, msg.source);
@@ -371,9 +348,6 @@ export const editor_js = `
         break;
       case 'removeFormat':
         removeFormat(msg.key, msg.index, msg.length);
-        break;
-      case 'formatLine':
-        formatLine(msg.key, msg.index, msg.length, msg.format, msg.value, msg.source);
         break;
       case 'formatText':
         formatText(msg.key, msg.index, msg.length, msg.formats, msg.source);
