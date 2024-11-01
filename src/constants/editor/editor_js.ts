@@ -222,7 +222,11 @@ export const editor_js = `
     const getLineJson = JSON.stringify({
       type: 'get-line',
       key: key,
-      data: getLineData
+      data: {
+        next: getLineData.next,
+        parent: getLineData.parent,
+        prev: getLineData.prev,
+      }
     });
     sendMessage(getLineJson);
   }
