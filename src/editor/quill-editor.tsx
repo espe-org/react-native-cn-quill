@@ -227,6 +227,7 @@ export default class QuillEditor extends React.Component<
       case 'get-selection':
       case 'get-dimensions':
       case 'get-html':
+      case 'get-semantic-html':
       case 'get-format':
       case 'get-leaf':
       case 'remove-format':
@@ -294,6 +295,10 @@ export default class QuillEditor extends React.Component<
 
   getHtml = (): Promise<string> => {
     return this.postAwait<any>({ command: 'getHtml' });
+  };
+
+  getSemanticHTML = (index?: number, length?: number): Promise<string> => {
+    return this.postAwait<any>({ command: 'getSemanticHTML', index, length });
   };
 
   getLength = (): Promise<number> => {

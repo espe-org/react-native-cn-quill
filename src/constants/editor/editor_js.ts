@@ -87,6 +87,16 @@ export const editor_js = `
     sendMessage(getHtmlJson);
   }
 
+  var getSemanticHTML = function (key, index, length) {
+    var semanticHTML = quill.getSemanticHTML(index, length);
+    var getSemanticHtmlJson = JSON.stringify({
+      type: 'get-semantic-html',
+      key: key,
+      data: semanticHTML
+    });
+    sendMessage(getSemanticHtmlJson);
+  }
+
   var insertEmbed = function (index, type, value) {
     quill.insertEmbed(index, type, value);
   }
@@ -309,6 +319,9 @@ export const editor_js = `
         break;
       case 'getHtml':
         getHtml(msg.key);
+        break;
+      case 'getSemanticHTML':
+        getHtml(msg.key, msg.index, msg.length);
         break;
       case 'getLength':
         getLength(msg.key);
