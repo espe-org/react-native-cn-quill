@@ -432,6 +432,10 @@ export default class QuillEditor extends React.Component<
     this.post({ command: 'dangerouslyPasteHTML', index, html });
   };
 
+  addMatcher = (nodeType: number, cb: (node: any, delta: any) => void) => {
+    this.post({ command: 'addMatcher', nodeType, cb });
+  };
+
   renderWebview = (
     content: string,
     style: StyleProp<ViewStyle>,

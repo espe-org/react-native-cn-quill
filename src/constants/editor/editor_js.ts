@@ -272,6 +272,10 @@ export const editor_js = `
     }
   }
 
+  const addMatcher = function (nodeType, cb) {
+    quill.clipboard.addMatcher(nodeType, cb);
+  }
+
   var getRequest = function (event) {
     var msg = JSON.parse(event.data);
     switch (msg.command) {
@@ -379,6 +383,9 @@ export const editor_js = `
         break;
       case 'list':
         list(msg.value);
+        break;
+      case 'addMatcher':
+        addMatcher(msg.nodeType, msg.cb);
         break;
       default:
         break;
