@@ -50,6 +50,17 @@ export const create_quill = ({
     placeholder: '${placeholder}',
     theme: '${theme}'
   });
+
+  quill.clipboard.addMatcher(Node.ELEMENT_NODE, function (node, delta) {
+    delta.ops = delta.ops.map(op => {
+      if (typeof op.insert === 'string') {
+        return { insert: op.insert };
+      }
+      return { insert: '' };
+    });
+    return delta;
+  });
+
   quill.root.setAttribute('spellcheck', false);
   </script>
   `;
