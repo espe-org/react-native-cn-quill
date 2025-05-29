@@ -459,10 +459,21 @@ export const editor_js = `
   });
 
   quill.on('selection-change', function(range, oldRange, source) {
-    var getSelectionChange = JSON.stringify({
-      type: 'selection-change',
-      data: { range, oldRange, source } });
-      sendMessage(getSelectionChange)
+  var getSelectionChange = JSON.stringify({
+    type: 'selection-change',
+    data: { range, oldRange, source } });
+    sendMessage(getSelectionChange)
+
+    setTimeout(() => {
+      const [leaf] = quill.getLeaf(range.index);
+      if (leaf?.domNode) {
+        let node = leaf.domNode;
+        while (node?.nodeType === Node.TEXT_NODE) {
+          node = node.parentElement;
+        }
+        node.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      }
+    }, 100);
   });
 
   quill.root.addEventListener('blur', function () {
