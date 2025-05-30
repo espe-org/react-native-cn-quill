@@ -465,15 +465,11 @@ export const editor_js = `
     sendMessage(getSelectionChange)
 
     setTimeout(() => {
-      const [leaf] = quill.getLeaf(range.index);
-      if (leaf?.domNode) {
-        let node = leaf.domNode;
-        while (node?.nodeType === Node.TEXT_NODE) {
-          node = node.parentElement;
-        }
-        node.scrollIntoView({ block: 'nearest', behavior: 'smooth' });
+      const bounds = quill.getBounds(range.index);
+      if (bounds) {
+        quill.scrollRectIntoView(bounds);
       }
-    }, 100);
+    }, 300);
   });
 
   quill.root.addEventListener('blur', function () {
