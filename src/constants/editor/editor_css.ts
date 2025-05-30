@@ -64,10 +64,6 @@ body { overflow-y: hidden; -webkit-overflow-scrolling: touch;background-color: $
   outline: 0px solid transparent;
 }
 
-#${editorId} > *:last-child {
-  padding-bottom: 20px;
-}
-
 .ql-container.ql-snow {
   border: none;
 }
